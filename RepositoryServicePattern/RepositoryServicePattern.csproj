@@ -175,6 +175,8 @@
     <Compile Include="Models\Enrollment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Interface\ICourseRepository.cs" />
+    <Compile Include="Models\Interface\IPersonRepository.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
