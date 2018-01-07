@@ -14,16 +14,15 @@ namespace RepositoryServicePattern.Controllers
     public class PersonController : Controller
     {
         private IPersonRepository _PersonRepository;
-        private ContosoUniversityEntities db = new ContosoUniversityEntities();
 
         public PersonController()
         {
-            _PersonRepository = new PersonRepository(); 
+            _PersonRepository = new PersonRepository();
         }
         // GET: People
         public ActionResult Index()
         {
-            var person = db.Person.Include(p => p.OfficeAssignment);
+            var person = _PersonRepository.GetAll();
             return View(person.ToList());
         }
 
@@ -34,7 +33,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Person.Find(id);
+            var person = _PersonRepository.Get(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -45,7 +44,7 @@ namespace RepositoryServicePattern.Controllers
         // GET: People/Create
         public ActionResult Create()
         {
-            ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location");
+            //ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location");
             return View();
         }
 
@@ -58,12 +57,11 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Person.Add(person);
-                db.SaveChanges();
+                _PersonRepository.Create(person);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
+            //ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
             return View(person);
         }
 
@@ -74,12 +72,12 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Person.Find(id);
+            var person = _PersonRepository.Get(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
+            //ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
             return View(person);
         }
 
@@ -92,11 +90,10 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(person).State = EntityState.Modified;
-                db.SaveChanges();
+                _PersonRepository.Update(person);
                 return RedirectToAction("Index");
             }
-            ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
+            //ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
             return View(person);
         }
 
@@ -107,7 +104,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Person.Find(id);
+            var person = _PersonRepository.Get(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -120,19 +117,16 @@ namespace RepositoryServicePattern.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Person person = db.Person.Find(id);
-            db.Person.Remove(person);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                var person = _PersonRepository.Get(id);
+                _PersonRepository.Delete(person);
             }
-            base.Dispose(disposing);
+            catch (DataException)
+            {
+                return RedirectToAction("Delete", new { id = id });
+            }
+            return RedirectToAction("Index");
         }
     }
 }

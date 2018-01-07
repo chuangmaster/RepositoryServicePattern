@@ -18,12 +18,11 @@ namespace RepositoryServicePattern.Controllers
         {
             _CourseRepository = new CourseRepository();
         }
-        private ContosoUniversityEntities db = new ContosoUniversityEntities();
 
         // GET: Courses
         public ActionResult Index()
         {
-            var course = db.Course.Include(c => c.Department);
+            var course = _CourseRepository.GetAll();
             return View(course.ToList());
         }
 
@@ -34,7 +33,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            var course = _CourseRepository.Get(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -45,7 +44,7 @@ namespace RepositoryServicePattern.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name");
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name");
             return View();
         }
 
@@ -58,12 +57,11 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Course.Add(course);
-                db.SaveChanges();
+                _CourseRepository.Create(course);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -74,12 +72,12 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            var course = _CourseRepository.Get(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -92,11 +90,10 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
-                db.SaveChanges();
+                _CourseRepository.Update(course);
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -107,7 +104,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            var course = _CourseRepository.Get(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -120,19 +117,17 @@ namespace RepositoryServicePattern.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Course.Find(id);
-            db.Course.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                var course = _CourseRepository.Get(id);
+                _CourseRepository.Delete(course);
             }
-            base.Dispose(disposing);
+            catch (DataException)
+            {
+                return RedirectToAction("Delete", new { id = id });
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
