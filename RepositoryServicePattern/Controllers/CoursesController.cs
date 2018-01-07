@@ -7,11 +7,17 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RepositoryServicePattern.Models;
+using RepositoryServicePattern.Models.Interface;
 
 namespace RepositoryServicePattern.Controllers
 {
     public class CoursesController : Controller
     {
+        ICourseRepository _CourseRepository;
+        public CoursesController()
+        {
+            _CourseRepository = new CourseRepository();
+        }
         private ContosoUniversityEntities db = new ContosoUniversityEntities();
 
         // GET: Courses

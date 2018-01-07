@@ -7,13 +7,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RepositoryServicePattern.Models;
+using RepositoryServicePattern.Models.Interface;
 
 namespace RepositoryServicePattern.Controllers
 {
     public class PersonController : Controller
     {
+        private IPersonRepository _PersonRepository;
         private ContosoUniversityEntities db = new ContosoUniversityEntities();
 
+        public PersonController()
+        {
+            _PersonRepository = new PersonRepository(); 
+        }
         // GET: People
         public ActionResult Index()
         {
