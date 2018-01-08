@@ -169,7 +169,6 @@
     <Compile Include="Models\Course.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CourseRepository.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
