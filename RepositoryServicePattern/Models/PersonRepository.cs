@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace RepositoryServicePattern.Models
@@ -41,10 +42,9 @@ namespace RepositoryServicePattern.Models
             }
         }
 
-
-        public Person Get(int ID)
+        public Person Get(Expression<Func<Person, bool>> predicate)
         {
-            return db.Person.FirstOrDefault(x => x.ID == ID);
+            throw new NotImplementedException();
         }
 
         public IQueryable<Person> GetAll()
@@ -103,6 +103,7 @@ namespace RepositoryServicePattern.Models
             // TODO: 如果上方的完成項已被覆寫，即取消下行的註解狀態。
             // GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

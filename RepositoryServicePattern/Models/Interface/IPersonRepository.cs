@@ -5,18 +5,7 @@ using System.Web;
 
 namespace RepositoryServicePattern.Models.Interface
 {
-    public interface IPersonRepository
+    public interface IPersonRepository:IRepository<Person>
     {
-        void Create(Person instance);
-
-        void Update(Person instance);
-
-        void Delete(Person instance);
-
-        Person Get(int categoryID);
-
-        IQueryable<Person> GetAll();
-
-        void SaveChanges();
     }
 }

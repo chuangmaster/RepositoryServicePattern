@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace RepositoryServicePattern.Models
@@ -40,11 +41,9 @@ namespace RepositoryServicePattern.Models
                 this.SaveChanges();
             }
         }
-
-
-        public Course Get(int courseID)
+        public Course Get(Expression<Func<Course, bool>> predicate)
         {
-            return db.Course.FirstOrDefault(x => x.CourseID == courseID);
+            throw new NotImplementedException();
         }
 
         public IQueryable<Course> GetAll()
@@ -103,6 +102,8 @@ namespace RepositoryServicePattern.Models
             // TODO: 如果上方的完成項已被覆寫，即取消下行的註解狀態。
             // GC.SuppressFinalize(this);
         }
+
+     
         #endregion
 
     }
