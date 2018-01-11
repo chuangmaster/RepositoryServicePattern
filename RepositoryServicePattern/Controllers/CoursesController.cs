@@ -13,10 +13,10 @@ namespace RepositoryServicePattern.Controllers
 {
     public class CoursesController : Controller
     {
-        ICourseRepository _CourseRepository;
+        IRepository<Course> _CourseRepository;
         public CoursesController()
         {
-            _CourseRepository = new CourseRepository();
+            _CourseRepository = new GenericRepository<Course>();
         }
 
         // GET: Courses
@@ -29,16 +29,15 @@ namespace RepositoryServicePattern.Controllers
         // GET: Courses/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("index");
             }
-            var course = _CourseRepository.Get(id.Value);
-            if (course == null)
+            else
             {
-                return HttpNotFound();
+                var category = this._CourseRepository.Get(x => x.CourseID == id.Value);
+                return View(category);
             }
-            return View(course);
         }
 
         // GET: Courses/Create
@@ -72,7 +71,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = _CourseRepository.Get(id.Value);
+            var course = _CourseRepository.Get(x => x.CourseID == id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -104,7 +103,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = _CourseRepository.Get(id.Value);
+            var course = _CourseRepository.Get(x => x.CourseID == id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -119,7 +118,7 @@ namespace RepositoryServicePattern.Controllers
         {
             try
             {
-                var course = _CourseRepository.Get(id);
+                var course = _CourseRepository.Get(x => x.CourseID == id);
                 _CourseRepository.Delete(course);
             }
             catch (DataException)

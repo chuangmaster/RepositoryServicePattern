@@ -33,7 +33,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(id.Value);
+            var person = _PersonRepository.Get(x => x.ID == id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -72,7 +72,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(id.Value);
+            var person = _PersonRepository.Get(x=>x.ID==id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -104,7 +104,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(id.Value);
+            var person = _PersonRepository.Get(x => x.ID == id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -119,7 +119,7 @@ namespace RepositoryServicePattern.Controllers
         {
             try
             {
-                var person = _PersonRepository.Get(id);
+                var person = _PersonRepository.Get(x => x.ID == id);
                 _PersonRepository.Delete(person);
             }
             catch (DataException)
