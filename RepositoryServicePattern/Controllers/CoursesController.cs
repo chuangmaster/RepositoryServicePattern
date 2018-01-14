@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RepositoryServicePattern.Repository;
+using RepositoryServicePattern.Repository.Interface;
+using RepositoryServicePattern.Repository.Models;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using RepositoryServicePattern.Models;
-using RepositoryServicePattern.Models.Interface;
 
 namespace RepositoryServicePattern.Controllers
 {
@@ -24,6 +21,7 @@ namespace RepositoryServicePattern.Controllers
         {
             var course = _CourseRepository.GetAll();
             return View(course.ToList());
+            
         }
 
         // GET: Courses/Details/5
