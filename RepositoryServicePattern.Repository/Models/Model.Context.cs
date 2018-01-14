@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RepositoryServicePattern.Repository
+namespace RepositoryServicePattern.Repository.Models
 {
     using System;
     using System.Data.Entity;

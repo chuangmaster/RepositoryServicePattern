@@ -7,29 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RepositoryServicePattern.Repository
+namespace RepositoryServicePattern.Repository.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Course
+    public partial class Department
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Course()
+        public Department()
         {
-            this.Enrollment = new HashSet<Enrollment>();
-            this.Person = new HashSet<Person>();
+            this.Course = new HashSet<Course>();
         }
     
-        public int CourseID { get; set; }
-        public string Title { get; set; }
-        public int Credits { get; set; }
         public int DepartmentID { get; set; }
+        public string Name { get; set; }
+        public decimal Budget { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public Nullable<int> InstructorID { get; set; }
+        public byte[] RowVersion { get; set; }
     
-        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrollment> Enrollment { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Person> Person { get; set; }
+        public virtual ICollection<Course> Course { get; set; }
+        public virtual Person Person { get; set; }
     }
 }
