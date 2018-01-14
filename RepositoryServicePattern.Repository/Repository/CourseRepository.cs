@@ -1,4 +1,5 @@
 ﻿using RepositoryServicePattern.Repository.Interface;
+using RepositoryServicePattern.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
