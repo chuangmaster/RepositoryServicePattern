@@ -248,6 +248,10 @@
       <Project>{a72e77ae-9e66-42cf-9731-76dc99d3549f}</Project>
       <Name>RepositoryServicePattern.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RepositoryServicePattern.Service\RepositoryServicePattern.Service.csproj">
+      <Project>{1d2004fa-4b37-40ba-87fd-61ed91a0da5b}</Project>
+      <Name>RepositoryServicePattern.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

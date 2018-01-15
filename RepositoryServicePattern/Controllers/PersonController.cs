@@ -1,6 +1,8 @@
 ﻿using RepositoryServicePattern.Repository;
 using RepositoryServicePattern.Repository.Interface;
 using RepositoryServicePattern.Repository.Models;
+using RepositoryServicePattern.Service.Interface;
+using RepositoryServicePattern.Service.Service;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,16 +16,16 @@ namespace RepositoryServicePattern.Controllers
 {
     public class PersonController : Controller
     {
-        private IPersonRepository _PersonRepository;
+        private IPersonService _PersonService;
 
         public PersonController()
         {
-            _PersonRepository = new PersonRepository();
+            _PersonService = new PersonService();
         }
         // GET: People
         public ActionResult Index()
         {
-            var person = _PersonRepository.GetAll();
+            var person = _PersonService.GetAll();
             return View(person.ToList());
         }
 
@@ -34,7 +36,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(x => x.ID == id.Value);
+            var person = _PersonService.GetByID(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -58,7 +60,7 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                _PersonRepository.Create(person);
+                _PersonService.Create(person);
                 return RedirectToAction("Index");
             }
 
@@ -73,7 +75,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(x=>x.ID==id.Value);
+            var person = _PersonService.GetByID(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -91,7 +93,7 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                _PersonRepository.Update(person);
+                _PersonService.Update(person);
                 return RedirectToAction("Index");
             }
             //ViewBag.ID = new SelectList(db.OfficeAssignment, "InstructorID", "Location", person.ID);
@@ -105,7 +107,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var person = _PersonRepository.Get(x => x.ID == id.Value);
+            var person = _PersonService.GetByID(id.Value);
             if (person == null)
             {
                 return HttpNotFound();
@@ -120,8 +122,7 @@ namespace RepositoryServicePattern.Controllers
         {
             try
             {
-                var person = _PersonRepository.Get(x => x.ID == id);
-                _PersonRepository.Delete(person);
+                _PersonService.Delete(id);
             }
             catch (DataException)
             {

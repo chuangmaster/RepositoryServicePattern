@@ -1,6 +1,8 @@
 ﻿using RepositoryServicePattern.Repository;
 using RepositoryServicePattern.Repository.Interface;
 using RepositoryServicePattern.Repository.Models;
+using RepositoryServicePattern.Service.Interface;
+using RepositoryServicePattern.Service.Service;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -10,18 +12,18 @@ namespace RepositoryServicePattern.Controllers
 {
     public class CoursesController : Controller
     {
-        IRepository<Course> _CourseRepository;
+        private ICourseService _CoursesService;
         public CoursesController()
         {
-            _CourseRepository = new GenericRepository<Course>();
+            _CoursesService = new CourseService();
         }
 
         // GET: Courses
         public ActionResult Index()
         {
-            var course = _CourseRepository.GetAll();
+            var course = _CoursesService.GetAll();
             return View(course.ToList());
-            
+
         }
 
         // GET: Courses/Details/5
@@ -33,7 +35,7 @@ namespace RepositoryServicePattern.Controllers
             }
             else
             {
-                var category = this._CourseRepository.Get(x => x.CourseID == id.Value);
+                var category = this._CoursesService.GetByID(id.Value);
                 return View(category);
             }
         }
@@ -54,7 +56,7 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                _CourseRepository.Create(course);
+                _CoursesService.Create(course);
                 return RedirectToAction("Index");
             }
 
@@ -69,7 +71,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = _CourseRepository.Get(x => x.CourseID == id);
+            var course = _CoursesService.GetByID(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -87,7 +89,7 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                _CourseRepository.Update(course);
+                _CoursesService.Update(course);
                 return RedirectToAction("Index");
             }
             //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
@@ -101,7 +103,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = _CourseRepository.Get(x => x.CourseID == id.Value);
+            var course = _CoursesService.GetByID(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -116,8 +118,7 @@ namespace RepositoryServicePattern.Controllers
         {
             try
             {
-                var course = _CourseRepository.Get(x => x.CourseID == id);
-                _CourseRepository.Delete(course);
+                _CoursesService.Delete(id);
             }
             catch (DataException)
             {
