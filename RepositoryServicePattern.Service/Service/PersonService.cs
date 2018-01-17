@@ -12,8 +12,12 @@ namespace RepositoryServicePattern.Service.Service
 {
     public class PersonService: IPersonService
     {
-        private IRepository<Person> repository = new GenericRepository<Person>();
+        private IPersonRepository repository;
 
+        public PersonService(IPersonRepository repository)
+        {
+            this.repository = repository;
+        }
 
         public IResult Create(Person instance)
         {
