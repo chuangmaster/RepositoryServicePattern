@@ -13,9 +13,9 @@ namespace RepositoryServicePattern.Controllers
     public class CoursesController : Controller
     {
         private ICourseService _CoursesService;
-        public CoursesController()
+        public CoursesController(ICourseService courseService)
         {
-            _CoursesService = new CourseService();
+            _CoursesService = courseService;
         }
 
         // GET: Courses
