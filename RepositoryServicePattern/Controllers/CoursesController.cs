@@ -1,45 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RepositoryServicePattern.Repository;
+using RepositoryServicePattern.Repository.Interface;
+using RepositoryServicePattern.Repository.Models;
+using RepositoryServicePattern.Service.Interface;
+using RepositoryServicePattern.Service.Service;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using RepositoryServicePattern.Models;
 
 namespace RepositoryServicePattern.Controllers
 {
     public class CoursesController : Controller
     {
-        private ContosoUniversityEntities db = new ContosoUniversityEntities();
+        private ICourseService _CoursesService;
+        public CoursesController(ICourseService courseService)
+        {
+            _CoursesService = courseService;
+        }
 
         // GET: Courses
         public ActionResult Index()
         {
-            var course = db.Course.Include(c => c.Department);
+            var course = _CoursesService.GetAll();
             return View(course.ToList());
+
         }
 
         // GET: Courses/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("index");
             }
-            Course course = db.Course.Find(id);
-            if (course == null)
+            else
             {
-                return HttpNotFound();
+                var category = this._CoursesService.GetByID(id.Value);
+                return View(category);
             }
-            return View(course);
         }
 
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name");
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name");
             return View();
         }
 
@@ -52,12 +56,11 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Course.Add(course);
-                db.SaveChanges();
+                _CoursesService.Create(course);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -68,12 +71,12 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            var course = _CoursesService.GetByID(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -86,11 +89,10 @@ namespace RepositoryServicePattern.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
-                db.SaveChanges();
+                _CoursesService.Update(course);
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            //ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -101,7 +103,7 @@ namespace RepositoryServicePattern.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            var course = _CoursesService.GetByID(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -114,19 +116,16 @@ namespace RepositoryServicePattern.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Course.Find(id);
-            db.Course.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                _CoursesService.Delete(id);
             }
-            base.Dispose(disposing);
+            catch (DataException)
+            {
+                return RedirectToAction("Delete", new { id = id });
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

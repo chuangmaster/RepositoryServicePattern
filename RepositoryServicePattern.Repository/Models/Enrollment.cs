@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RepositoryServicePattern.Models
+namespace RepositoryServicePattern.Repository.Models
 {
     using System;
     using System.Collections.Generic;
