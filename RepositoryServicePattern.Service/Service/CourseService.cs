@@ -12,8 +12,12 @@ namespace RepositoryServicePattern.Service.Service
 {
     public class CourseService : ICourseService
     {
-        private IRepository<Course> repository = new GenericRepository<Course>();
+        private ICourseRepository repository;
 
+        public CourseService(ICourseRepository courseRepository)
+        {
+            repository = courseRepository;
+        }
 
         public IResult Create(Course instance)
         {

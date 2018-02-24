@@ -18,10 +18,11 @@ namespace RepositoryServicePattern.Controllers
     {
         private IPersonService _PersonService;
 
-        public PersonController()
+        public PersonController(IPersonService personService)
         {
-            _PersonService = new PersonService();
+            _PersonService = personService;
         }
+
         // GET: People
         public ActionResult Index()
         {

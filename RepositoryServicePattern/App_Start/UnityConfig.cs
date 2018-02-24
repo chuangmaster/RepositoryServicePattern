@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+using RepositoryServicePattern.Repository;
+using RepositoryServicePattern.Repository.Interface;
+using RepositoryServicePattern.Repository.Models;
+using RepositoryServicePattern.Service.Interface;
+using RepositoryServicePattern.Service.Service;
+>>>>>>> 1e6d2a5b8a69002894b7ac4d1f838f53e3666235
 using System;
 
 using Unity;
@@ -42,6 +50,15 @@ namespace RepositoryServicePattern
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
+
+            //Service 
+            container.RegisterType<ICourseService, CourseService>();
+            container.RegisterType<IPersonService, PersonService>();
+
+            //Repository
+            container.RegisterType<IPersonRepository, PersonRepository>();
+            container.RegisterType<ICourseRepository, CourseRepository>();
+
         }
     }
 }

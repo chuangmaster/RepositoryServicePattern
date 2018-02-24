@@ -6,7 +6,7 @@ using RepositoryServicePattern.Repository.Models;
 
 namespace RepositoryServicePattern.Repository.Interface
 {
-    public interface IPersonRepository:IRepository<Person>
+    public interface IPersonRepository : IRepository<Person>
     {
     }
 }
