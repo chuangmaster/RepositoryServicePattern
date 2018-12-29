@@ -13,9 +13,12 @@ namespace RepositoryServicePattern.Controllers
     public class CoursesController : Controller
     {
         private ICourseService _CoursesService;
-        public CoursesController(ICourseService courseService)
+        private IScheduleService _ScheduleService;
+
+        public CoursesController(ICourseService courseService, IScheduleService scheduleService)
         {
             _CoursesService = courseService;
+            _ScheduleService = scheduleService;
         }
 
         // GET: Courses
